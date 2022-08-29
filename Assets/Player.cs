@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     private bool isRunning;
 
     private bool canRun;
+    private bool canRoll;
     #endregion
 
     #region
@@ -131,6 +132,17 @@ public class Player : MonoBehaviour
         anim.SetBool("isSliding", isSliding);
         anim.SetBool("canClimb", canClimbLedge);
         anim.SetBool("canDoubleJump", canDoubleJump);
+        anim.SetBool("canRoll", canRoll);
+
+        if (rigidBody.velocity.y < -20)
+        {
+            canRoll = true;
+        }
+    }
+
+    private void rollAnimationFinished()
+    {
+        canRoll = false;
     }
 
 
