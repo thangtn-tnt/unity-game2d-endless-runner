@@ -130,6 +130,7 @@ public class Player : MonoBehaviour
         anim.SetBool("isGrounded", isGrounded);
         anim.SetBool("isSliding", isSliding);
         anim.SetBool("canClimb", canClimbLedge);
+        anim.SetBool("canDoubleJump", canDoubleJump);
     }
 
 
@@ -173,9 +174,9 @@ public class Player : MonoBehaviour
             }
             else if (canDoubleJump)
             {
+                canDoubleJump = false;
                 jumpForce = doubleJumpForce;
                 jump();
-                canDoubleJump = false;
             }
         }
     }
