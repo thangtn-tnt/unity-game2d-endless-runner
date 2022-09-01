@@ -126,6 +126,7 @@ public class Player : MonoBehaviour
 
     private void AnimationController()
     {
+        anim.SetFloat("xVelocity", rigidBody.velocity.x);
         anim.SetFloat("yVelocity", rigidBody.velocity.y);
         anim.SetBool("isRunning", isRunning);
         anim.SetBool("isGrounded", isGrounded);
@@ -195,7 +196,7 @@ public class Player : MonoBehaviour
 
     private void checkForSlide()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl) && canSlide && isGrounded)
+        if (Input.GetKeyDown(KeyCode.LeftControl) && canSlide && isGrounded && rigidBody.velocity.x > initMoveSpeed)
         {
             isSliding = true;
             canSlide = false;
