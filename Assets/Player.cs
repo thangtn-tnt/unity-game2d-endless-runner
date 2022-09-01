@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
     private Animator anim;
     #endregion
 
+    [Header("Coin info")]
+    public int coin;
+
     #region
     [Header("Movement Info")]
     [SerializeField] private float moveSpeed;
