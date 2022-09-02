@@ -160,6 +160,7 @@ MonoBehaviour:
   nextPosition: 3
   trapSpeed: 5
   rotationMultiplier: 2
+  chanceToSpawn: 25
 --- !u!1 &3580365827287567212
 GameObject:
   m_ObjectHideFlags: 0
