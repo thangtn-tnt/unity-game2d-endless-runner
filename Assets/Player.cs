@@ -9,8 +9,15 @@ public class Player : MonoBehaviour
     private Animator anim;
     #endregion
 
-    [Header("Coin info")]
+    [Header("Collectable info")]
     public int coin;
+
+    [Header("Knockback info")]
+    [SerializeField] private Vector2 knockbackDirection;
+    [SerializeField] private float knockbackPower;
+
+    private bool canBeKnocked = true;
+    private bool isKnocked;
 
     #region
     [Header("Movement Info")]
@@ -119,7 +126,7 @@ public class Player : MonoBehaviour
     }
 
     private void initPlayerInfo()
-    {
+    {        
         initMoveSpeed = moveSpeed;
         initJumpForce = jumpForce;
         initSpeedIncreaseMiles = speedIncreaseMiles;
@@ -137,8 +144,9 @@ public class Player : MonoBehaviour
         anim.SetBool("canClimb", canClimbLedge);
         anim.SetBool("canDoubleJump", canDoubleJump);
         anim.SetBool("canRoll", canRoll);
+        anim.SetBool("isKnocked", isKnocked);
 
-        if (rigidBody.velocity.y < -20)
+        if (rigidBody.velocity.y < -25)
         {
             canRoll = true;
         }
@@ -149,9 +157,29 @@ public class Player : MonoBehaviour
         canRoll = false;
     }
 
+    private void knockbackAnimationFinished()
+    {
+        isKnocked = false;
+        canBeKnocked = true;
+        canRun = true;
+    }
+
+    public void knockback()
+    {
+        if (canBeKnocked)
+        {
+            isKnocked = true;
+        }
+    }
 
     private void checkForRun()
     {
+        if (isKnocked & canBeKnocked)
+        {
+            canBeKnocked = false;
+            canRun = false;
+            rigidBody.velocity = knockbackDirection * knockbackPower;
+        }
         if (canRun)
         {
             if (isBottomWallDetected || isWallDetected && !isSliding)
@@ -199,7 +227,7 @@ public class Player : MonoBehaviour
 
     private void checkForSlide()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl) && canSlide && isGrounded && rigidBody.velocity.x > initMoveSpeed)
+        if (Input.GetKeyDown(KeyCode.LeftControl) && canSlide && isGrounded && rigidBody.velocity.x >= initMoveSpeed)
         {
             isSliding = true;
             canSlide = false;

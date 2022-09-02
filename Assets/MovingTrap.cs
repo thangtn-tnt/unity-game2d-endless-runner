@@ -11,9 +11,13 @@ public class MovingTrap : MonoBehaviour
     [SerializeField] private float rotationMultiplier;
     [SerializeField] private float chanceToSpawn;
 
+    private Player player;
+
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.Find("Player").GetComponent<Player>();
+
         if (Random.Range(1,100) > chanceToSpawn)
         {
             Destroy(transform.parent.gameObject);
@@ -45,6 +49,9 @@ public class MovingTrap : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.tag == "Player")
+        {
+            player.knockback();
+        }
     }
 }
