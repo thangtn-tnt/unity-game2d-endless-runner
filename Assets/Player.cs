@@ -9,10 +9,7 @@ public class Player : MonoBehaviour
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private Coroutine hurtAnimCoroutine;
-    #endregion
-
-    [Header("Collectable info")]
-    public int coin;
+    #endregion    
 
     [Header("Knockback info")]
     [SerializeField] private Vector2 knockbackDirection;

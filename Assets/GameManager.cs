@@ -6,12 +6,21 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private string beginScene;
+    public static GameManager instance;
 
-    // Start is called before the first frame update
-    void Start()
+
+    #region Collectable info
+    
+    public int coin;
+    
+    #endregion
+
+
+    [SerializeField] private string beginScene;
+    
+    void Awake()
     {
-        
+        instance = this; 
     }
 
     // Update is called once per frame
