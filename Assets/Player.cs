@@ -378,7 +378,7 @@ public class Player : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
 
-        canBeKnocked = true; //make player valnurable again
+        canBeKnocked = true; //make player vulnerable again
 
         hurtAnimCoroutine = null; // stop coroutine
     }
