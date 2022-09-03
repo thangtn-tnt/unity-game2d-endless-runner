@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
     #region components
     private Rigidbody2D rigidBody;
     private Animator anim;
+    private SpriteRenderer spriteRenderer;
+    private Coroutine hurtAnimCoroutine;
     #endregion
 
     [Header("Collectable info")]
@@ -103,6 +105,7 @@ public class Player : MonoBehaviour
     {
         rigidBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         initPlayerInfo();
     }
@@ -110,7 +113,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKey)
+        if (Input.anyKey && !isKnocked)
         {
             canRun = true;
         }
@@ -159,8 +162,7 @@ public class Player : MonoBehaviour
 
     private void knockbackAnimationFinished()
     {
-        isKnocked = false;
-        canBeKnocked = true;
+        isKnocked = false;        
         canRun = true;
     }
 
@@ -169,6 +171,7 @@ public class Player : MonoBehaviour
         if (canBeKnocked)
         {
             isKnocked = true;
+            hurtVFX();
         }
     }
 
@@ -208,18 +211,18 @@ public class Player : MonoBehaviour
 
     private void checkForJump()
     {
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("space") && !isKnocked)
         {
             if (isGrounded)
             {
                 jumpForce = initJumpForce;
-                jump();
                 canDoubleJump = true;
+                jump();
             }
             else if (canDoubleJump)
             {
-                canDoubleJump = false;
                 jumpForce = doubleJumpForce;
+                canDoubleJump = false;
                 jump();
             }
         }
@@ -345,4 +348,50 @@ public class Player : MonoBehaviour
         Gizmos.DrawLine(ceilingCheck.position, new Vector3(ceilingCheck.position.x, ceilingCheck.position.y + wallCheckDistance, ceilingCheck.position.z));
     }
 
+    private IEnumerator hurtVFXRoutine()
+    {
+        Color originalColor = spriteRenderer.color;
+        Color darkenColor = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.6f);
+        
+        spriteRenderer.color = darkenColor;
+
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = originalColor;        
+
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = darkenColor;
+
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = originalColor;
+
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = darkenColor;
+
+        yield return new WaitForSeconds(0.3f);
+        spriteRenderer.color = originalColor;
+
+        yield return new WaitForSeconds(0.3f);
+        spriteRenderer.color = darkenColor;
+
+        yield return new WaitForSeconds(0.4f);
+        spriteRenderer.color = originalColor;
+
+        yield return new WaitForSeconds(0.2f);
+
+        canBeKnocked = true; //make player valnurable again
+
+        hurtAnimCoroutine = null; // stop coroutine
+    }
+
+    private void hurtVFX()
+    {
+        // stop activated coroutine before active new one
+        if (hurtAnimCoroutine is not null) 
+        {
+            StopCoroutine(hurtAnimCoroutine);
+        }
+
+        // start coroutine with reference to it
+        hurtAnimCoroutine = StartCoroutine(hurtVFXRoutine());
+    }
 }
