@@ -20,7 +20,8 @@ public class Player : MonoBehaviour
 
     #region
     [Header("Movement Info")]
-    [SerializeField] private float moveSpeed;
+    public float moveSpeed;
+    public float moveSpeedNeededToSurvive;
     [SerializeField] private float maxMoveSpeed;
 
     private float initMoveSpeed;
@@ -169,6 +170,7 @@ public class Player : MonoBehaviour
         {
             isKnocked = true;
             hurtVFX();
+            resetMoveSpeed();
         }
     }
 

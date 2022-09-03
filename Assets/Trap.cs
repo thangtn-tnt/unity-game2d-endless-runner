@@ -29,7 +29,14 @@ public class Trap : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            player.knockback();
+            if (player.moveSpeed >= player.moveSpeedNeededToSurvive)
+            {
+                player.knockback();
+            }
+            else
+            {
+                GameManager.instance.gameRestart(); 
+            }
         }
     }
 }
