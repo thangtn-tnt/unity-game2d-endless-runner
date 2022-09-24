@@ -8,11 +8,19 @@ public class ColorChangeController : MonoBehaviour
 
     private Color nextColor;
 
+    private BoxCollider2D boxCollider;
+
 
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponentInParent<SpriteRenderer>();
+        boxCollider = GetComponent<BoxCollider2D>();
+
+        //change size of this box collider according to sprite size of the parent
+
+        boxCollider.size = new Vector2(spriteRenderer.size.x, spriteRenderer.size.y + 0.001f);
+        boxCollider.offset = Vector2.zero;
     }
 
     // Update is called once per frame
@@ -25,12 +33,16 @@ public class ColorChangeController : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            spriteRenderer.color = nextColor;
+            for (int i = 0; i < transform.parent.childCount; i++)
+            {
+                Transform child = transform.parent.GetChild(i);
 
-            //if (ColorUtility.TryParseHtmlString("#8A1E11", out nextColor))
-            //{
-            //    spriteRenderer.color = nextColor;
-            //}
+                if (child.tag == "PlatformHeader")
+                {
+                    SpriteRenderer newSr = child.GetComponent<SpriteRenderer>();
+                    newSr.color = nextColor;
+                }
+            }          
         }
     }
 }
